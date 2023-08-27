@@ -1,0 +1,23 @@
+<form [formGroup]="authFacade.loginFormGroup" (ngSubmit)="authFacade.signIn()">
+  <h2>Sign in</h2>
+  <div>
+    <label for="username">Username</label><br>
+    <input type="text" formControlName="username">
+    <p *ngIf="authFacade.loginFormGroup?.controls['username'].touched && authFacade.loginFormGroup?.controls['username'].errors">This field is required...</p>
+  </div>
+
+  <pre></pre>
+
+  <div>
+    <label for="password">Password</label><br>
+    <input type="password" formControlName="password">
+    <p *ngIf="authFacade.loginFormGroup?.controls['password'].touched && authFacade.loginFormGroup?.controls['password'].errors">This field is required...</p>
+  </div>
+
+  <pre></pre>
+
+  <div>
+    <button [disabled]="!authFacade.loginFormGroup.valid" type="submit">Login</button>
+  </div>
+  <pre></pre>
+</form>
