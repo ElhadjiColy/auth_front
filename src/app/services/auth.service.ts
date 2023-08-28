@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {map, Observable, tap} from "rxjs";
+import {catchError, map, Observable, tap} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +37,10 @@ export class AuthService {
     return this.http.post(`${environment.SERVER_URL}/api/token/`, {username, password})
       .pipe(
         tap((response: {access: string, refresh: string}) => this.jwt = response.access),
-        map(r => r.refresh)
+        map(r => r.refresh),
+        catchError((error: HttpErrorResponse) => {
+          throw (error.error.detail);
+        })
       );
   }
   signOut() {
