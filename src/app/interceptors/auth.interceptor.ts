@@ -17,7 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const isLoggedIn = this.authService.isLoggedIn;
     const isToServer: boolean = request.url.startsWith(environment.SERVER_URL);
-    const USER_TOKEN = this.authService.jwt_key;
+    const USER_TOKEN = this.authService.jwt;
 
     if (isLoggedIn && isToServer) {
       request = request.clone({

@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {map, Observable, tap} from "rxjs";
+import {catchError, map, Observable, tap} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -9,26 +9,38 @@ import {map, Observable, tap} from "rxjs";
 export class AuthService {
 
   private static readonly key = 'JWT_KEY';
+  private static readonly refresh_token = 'REFRESH_TOKEN';
   http = inject(HttpClient);
   constructor(){}
 
   get isLoggedIn(): boolean {
-    return !!this.jwt_key;
+    return !!this.jwt;
   }
 
-  get jwt_key(): string {
+  get jwt(): string {
     return sessionStorage.getItem(AuthService.key) ?? '';
   }
 
-  private set jwt_key(val: string) {
+  get jwtRefresh(): string {
+    return sessionStorage.getItem(AuthService.refresh_token) ?? '';
+  }
+
+  private set jwt(val: string) {
+    sessionStorage.setItem(AuthService.key, val);
+  }
+
+  private set jwtRefresh(val: string) {
     sessionStorage.setItem(AuthService.key, val);
   }
 
   signIn(username: string, password: string): Observable<string> {
     return this.http.post(`${environment.SERVER_URL}/api/token/`, {username, password})
       .pipe(
-        tap((response: {access: string, refresh: string}) => this.jwt_key = response.access),
-        map(r => r.refresh)
+        tap((response: {access: string, refresh: string}) => this.jwt = response.access),
+        map(r => r.refresh),
+        catchError((error: HttpErrorResponse) => {
+          throw (error.error.detail);
+        })
       );
   }
   signOut() {
