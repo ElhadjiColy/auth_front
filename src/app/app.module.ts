@@ -6,16 +6,18 @@ import { AppComponent } from './app.component';
 import {LoginModule} from "./pages/login/login.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
+import {HomeModule} from "./components/home/home.module";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    LoginModule
+    LoginModule,
+    HomeModule
   ],
   providers: [
     {
