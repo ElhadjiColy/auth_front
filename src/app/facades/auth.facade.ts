@@ -1,6 +1,7 @@
 import {inject, Injectable} from "@angular/core";
 import {AuthService} from "../services/auth.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Injectable(
   {
@@ -10,6 +11,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 export class AuthFacade {
   loginFormGroup: FormGroup;
   authService = inject(AuthService);
+  router = inject(Router);
 
   constructor() {
     this.buildLoginGroupForm();
@@ -20,7 +22,7 @@ export class AuthFacade {
 
     this.authService.signIn(this.loginFormGroup.value.username, this.loginFormGroup.value.password)
       .subscribe((data) => {
-        console.log('response ', data),
+        this.router.navigate(['']),
           (err: any) => {
           throw(err)
         }

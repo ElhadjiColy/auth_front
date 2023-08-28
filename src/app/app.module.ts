@@ -7,10 +7,13 @@ import {LoginModule} from "./pages/login/login.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import {HomeModule} from "./components/home/home.module";
+import {AuthGuard} from "./guards/auth.guard";
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,7 +25,8 @@ import {HomeModule} from "./components/home/home.module";
   providers: [
     {
       provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true
-    }
+    },
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
