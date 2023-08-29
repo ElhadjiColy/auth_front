@@ -39,6 +39,7 @@ export class AuthInterceptor implements HttpInterceptor {
           !request.url.includes('api/token') &&
           error.status === 401
         ) {
+          console.log('should refresh the token...')
           return this.handle401Error(request, next);
         }
 
@@ -48,6 +49,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+    console.log('is refreshing ?: ', this.isRefreshing);
     if (!this.isRefreshing) {
       this.isRefreshing = true;
 
