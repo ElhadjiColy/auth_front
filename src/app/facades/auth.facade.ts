@@ -32,7 +32,7 @@ export class AuthFacade {
         })
       )
       .subscribe((data) => {
-        this.router.navigate(['']);
+        this.router.navigate(['users']);
       });
 
   }

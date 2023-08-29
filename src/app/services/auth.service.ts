@@ -30,13 +30,16 @@ export class AuthService {
   }
 
   private set jwtRefresh(val: string) {
-    sessionStorage.setItem(AuthService.key, val);
+    sessionStorage.setItem(AuthService.refresh_token, val);
   }
 
   signIn(username: string, password: string): Observable<string> {
     return this.http.post(`${environment.SERVER_URL}/api/token/`, {username, password})
       .pipe(
-        tap((response: {access: string, refresh: string}) => this.jwt = response.access),
+        tap((response: {access: string, refresh: string}) => {
+          this.jwt = response.access;
+          this.jwtRefresh = response.refresh;
+        }),
         map(r => r.refresh),
         catchError((error: HttpErrorResponse) => {
           throw (error.error.detail);
@@ -45,5 +48,15 @@ export class AuthService {
   }
   signOut() {
     console.log('on signing out');
+  }
+
+  refreshToken() {
+    return this.http.post(`${environment.SERVER_URL}/api/token/refresh/`, {
+      refresh: this.jwtRefresh
+    })
+      .pipe(
+        tap((response: {access: string}) => this.jwt = response.access),
+        map(response => response.access)
+      )
   }
 }

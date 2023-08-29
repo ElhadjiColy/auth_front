@@ -9,11 +9,13 @@ import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import {HomeModule} from "./components/home/home.module";
 import {AuthGuard} from "./guards/auth.guard";
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { UsersComponent } from './pages/users/users.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
+    UsersComponent,
   ],
   imports: [
     BrowserModule,
