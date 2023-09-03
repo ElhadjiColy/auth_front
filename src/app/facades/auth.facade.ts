@@ -1,5 +1,5 @@
 import {inject, Injectable} from "@angular/core";
-import {AuthService} from "../services/auth.service";
+import {AuthService} from "../services/auth/auth.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {catchError, map, throwError} from "rxjs";

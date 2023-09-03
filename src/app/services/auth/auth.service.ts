@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {environment} from "../../environments/environment";
+import {environment} from "../../../environments/environment";
 import {catchError, map, Observable, tap} from "rxjs";
 
 @Injectable({
@@ -39,6 +39,7 @@ export class AuthService {
         tap((response: {access: string, refresh: string}) => {
           this.jwt = response.access;
           this.jwtRefresh = response.refresh;
+          console.log('response ', response);
         }),
         map(r => r.refresh),
         catchError((error: HttpErrorResponse) => {

@@ -7,7 +7,7 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import {catchError, Observable, switchMap, throwError} from 'rxjs';
-import {AuthService} from "../services/auth.service";
+import {AuthService} from "../services/auth/auth.service";
 import {environment} from "../../environments/environment";
 import {EventData} from "../services/shared/event";
 import {EventBusService} from "../services/shared/event-bus.service";
