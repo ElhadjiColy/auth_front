@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
-import {catchError, map, Observable, tap} from "rxjs";
+import {catchError, map, Observable, tap, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +33,7 @@ export class AuthService {
     sessionStorage.setItem(AuthService.refresh_token, val);
   }
 
-  signIn(username: string, password: string): Observable<string> {
+  signIn(username: string, password: string): Observable<{ access: string, refresh: string }> {
     return this.http.post(`${environment.SERVER_URL}/api/token/`, {username, password})
       .pipe(
         tap((response: {access: string, refresh: string}) => {
@@ -41,23 +41,35 @@ export class AuthService {
           this.jwtRefresh = response.refresh;
           console.log('response ', response);
         }),
-        map(r => r.refresh),
+        map(r => r),
         catchError((error: HttpErrorResponse) => {
           throw (error.error.detail);
         })
       );
   }
+
   signOut() {
     console.log('on signing out');
+    sessionStorage.clear();
   }
+
 
   refreshToken() {
     return this.http.post(`${environment.SERVER_URL}/api/token/refresh/`, {
       refresh: this.jwtRefresh
     })
       .pipe(
-        tap((response: {access: string}) => this.jwt = response.access),
-        map(response => response.access)
+        tap((response: {access: string, refresh: string}) => {
+          console.log('token after refreshing... ', response);
+          console.log('is same token ', this.jwt == response.access);
+          this.jwt = response.access;
+          console.log('is same token ', this.jwt == response.access);
+          this.jwtRefresh = response.refresh;
+        }),
+        map(response => response),
+        catchError((err: HttpErrorResponse) => {
+          throw (err.error.detail);
+        })
       )
   }
 }

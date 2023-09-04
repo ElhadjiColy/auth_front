@@ -3,12 +3,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
+    "module": "CommonJS",
     "types": [
-      "jasmine"
+      "jest"
     ]
   },
   "files": [
-    "src/test.ts",
+    "src/karmaTest.ts",
     "src/polyfills.ts"
   ],
   "include": [
